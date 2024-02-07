@@ -16,7 +16,7 @@ To integrate CDLogger into your Android project, follow these steps:
 ### Step 1: Download the AAR File
 
 Download the `cdlogger-debug.aar` file
-from  [here](cdlogger/build/outputs/aar/cdlogger-debug.aar).
+from  [here](cdlogger-debug.aar).
 
 ### Step 2: Include AAR File
 
