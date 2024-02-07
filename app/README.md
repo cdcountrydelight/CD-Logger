@@ -1,39 +1,52 @@
 # CDLogger Library
 
-CDLogger is a logging utility library for Android applications that allows you to easily log user
-events , activities and fragments.
+CDLogger is a logging utility library for Android applications that simplifies the process of
+logging user events, activities, and fragments.
 
 ## Features
 
-- Log custom events with event details.
+- Log custom events with detailed event information.
 - Automatically log activity and fragment opening events.
-- Provide customizable options for logging activity and fragment events.
+- Customizable options for logging activity and fragment events.
 
 ## Installation
 
-To use CDLogger in your Android project, follow these steps:
+To integrate CDLogger into your Android project, follow these steps:
 
-### Step 1: Switch to project view
+### Step 1: Download the AAR File
 
-Change file view mode from android to project, then navigate to app folder.
+Download the `cdlogger-debug.aar` file
+from  [here](../cdlogger/build/outputs/aar/cdlogger-debug.aar).
 
-### Step 2: Add the aar file to libs folder
+### Step 2: Include AAR File
 
-Add the `cdlogger-debug.aar` file in your app/libs folder (if libs folder not present create new).
+1. Navigate to your project's `app` folder.
+2. Create a `libs` folder if it doesn't already exist.
+3. Place the `cdlogger-debug.aar` file in the `libs` folder.
 
-### Step 3: Add the aar file in your build.gradle(app) file.
+### Step 3: Modify `build.gradle` (app)
 
-To add all aar files inside libs folder in project use:-.
+Add the following line to your app-level `build.gradle` file to include the AAR file:
+
+```kotlin
+implementation files ('libs/cdlogger-debug.aar')
+```
+
+or to add all aar files inside libs folder use:-
 
 ```kotlin
 implementation fileTree (dir: 'libs', include: ['*.aar'])
 ```
 
-or if you only want to add cd-logger library use :-
+### Step 4: Sync Gradle
 
-```kotlin
-implementation files ('libs/aar-file-name.aar')
-```
+After modifying your `build.gradle` file, sync your project with Gradle to apply the changes:
+
+1. Click on the "Sync Project with Gradle Files" icon in the toolbar.
+2. Alternatively, go to "File" > "Sync Project with Gradle Files" in the menu.
+
+This will ensure that the CDLogger library is properly included in your project and any changes made
+to the dependencies are applied.
 
 ## Usage
 
