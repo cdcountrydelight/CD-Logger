@@ -44,6 +44,7 @@ class CDLogger {
     ) {
         private var logActivityOpeningEvent: Boolean = false
         private var logFragmentOpeningEvent: Boolean = false
+        private var logCrashData: Boolean = true
 
         /**
          * Sets whether to log activity opening events.
@@ -70,6 +71,12 @@ class CDLogger {
         }
 
 
+        fun logCrashEvent(logCrashEvent: Boolean): Builder {
+            this.logCrashData = logCrashEvent
+            return this
+        }
+
+
         /**
          * Builds  a new CDLogger instance.
          */
@@ -79,6 +86,7 @@ class CDLogger {
                 spaceDetails = spaceDetails,
                 logActivityOpeningEvent = logActivityOpeningEvent,
                 logFragmentOpeningEvent = logFragmentOpeningEvent,
+                logCrashData = logCrashData
             )
         }
     }

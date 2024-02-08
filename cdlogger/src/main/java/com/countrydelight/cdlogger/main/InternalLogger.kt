@@ -12,18 +12,21 @@ import com.countrydelight.cdlogger.domain.models.SpaceDetails
 import com.countrydelight.cdlogger.domain.usecases.AddEventToLocalUseCase
 import com.countrydelight.cdlogger.domain.usecases.StartLogEventWorkerUseCase
 import com.countrydelight.cdlogger.domain.utils.SharedPreferenceHelper
-import com.countrydelight.cdlogger.main.screen_detectors.ActivityLifecycleDetector
+import com.countrydelight.cdlogger.main.detectors.exception.UncaughtExceptionDetector
+import com.countrydelight.cdlogger.main.detectors.screen.ActivityLifecycleDetector
 import com.countrydelight.cdlogger.main.utils.FunctionHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.UUID
+import kotlin.system.exitProcess
 
 internal class InternalLogger(
     private val application: Application,
     private val spaceDetails: SpaceDetails,
     private val logActivityOpeningEvent: Boolean,
-    private val logFragmentOpeningEvent: Boolean
+    private val logFragmentOpeningEvent: Boolean,
+    private val logCrashData: Boolean
 ) {
     private val preferences = SharedPreferenceHelper.get(application)
     private val addEventToLocalUseCase = AddEventToLocalUseCase(application)
@@ -47,8 +50,15 @@ internal class InternalLogger(
         getAdvertisingId()
         setAutoObserver()
         saveSpaceData()
+        initExceptionHandler()
         instance = this
         StartLogEventWorkerUseCase.invoke(application)
+    }
+
+    private fun initExceptionHandler() {
+        if (logCrashData) {
+            Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionDetector())
+        }
     }
 
 
@@ -144,6 +154,19 @@ internal class InternalLogger(
             )
             addEventToLocalUseCase(eventEntity)
             StartLogEventWorkerUseCase.invoke(application)
+        }
+    }
+
+    internal fun logEventAndCloseApp(event: Event) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val eventEntity = EventEntity(
+                eventName = event.eventName,
+                eventData = event.eventData,
+                createdAt = FunctionHelper.getCurrentTimeInMillis()
+            )
+            addEventToLocalUseCase(eventEntity)
+            android.os.Process.killProcess(android.os.Process.myPid())
+            exitProcess(10)
         }
     }
 

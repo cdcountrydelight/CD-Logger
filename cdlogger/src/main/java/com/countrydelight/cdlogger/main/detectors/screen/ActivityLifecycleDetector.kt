@@ -1,4 +1,4 @@
-package com.countrydelight.cdlogger.main.screen_detectors
+package com.countrydelight.cdlogger.main.detectors.screen
 
 import android.app.Activity
 import android.app.Application
