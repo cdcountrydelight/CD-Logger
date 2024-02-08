@@ -40,7 +40,7 @@ class CDLogger {
      */
     class Builder(
         private val application: Application,
-        private val spaceDetails: SpaceDetails? = null
+        private val spaceDetails: SpaceDetails
     ) {
         private var logActivityOpeningEvent: Boolean = false
         private var logFragmentOpeningEvent: Boolean = false

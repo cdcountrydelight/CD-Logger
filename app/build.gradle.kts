@@ -7,6 +7,10 @@ android {
     namespace = "com.countrydelight.countrydelightlogger"
     compileSdk = 34
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId = "com.countrydelight.countrydelightlogger"
         minSdk = 21

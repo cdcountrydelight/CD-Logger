@@ -21,7 +21,7 @@ import java.util.UUID
 
 internal class InternalLogger(
     private val application: Application,
-    private val spaceDetails: SpaceDetails?,
+    private val spaceDetails: SpaceDetails,
     private val logActivityOpeningEvent: Boolean,
     private val logFragmentOpeningEvent: Boolean
 ) {
@@ -35,6 +35,7 @@ internal class InternalLogger(
     init {
         initLogger()
     }
+
 
     /**
      * Initializes the logger.
@@ -55,11 +56,7 @@ internal class InternalLogger(
      * Saves the space data to the preferences.
      */
     private fun saveSpaceData() {
-        preferences.spaceDetails = spaceDetails ?: SpaceDetails(
-            "AAAALNQtN6k",
-            "AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI",
-            "12eQX3gUIi7DdVJsv50ozfQwCX_k-yqjEEiCBTmGGW4"
-        )
+        preferences.spaceDetails = spaceDetails
     }
 
 
