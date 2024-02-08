@@ -18,7 +18,6 @@ class MainActivity : AppCompatActivity() {
         }
         binding.button.genericOnClick {
             Toast.makeText(this, "Button Click", Toast.LENGTH_LONG).show()
-
         }
     }
 }
