@@ -1,13 +1,14 @@
 # CDLogger Library
 
 CDLogger is a logging utility library for Android applications that simplifies the process of
-logging user events, activities, and fragments.
+logging user events, activities, fragments and app crash.
 
 ## Features
 
 - Log custom events with detailed event information.
 - Automatically log activity and fragment opening events.
-- Customizable options for logging activity and fragment events.
+- Automatically log app crash events.
+- Customizable options for logging activity , fragment and crash events.
 
 ## Installation
 
@@ -52,7 +53,23 @@ to the dependencies are applied.
 
 To start using CDLogger in your application, follow these steps:
 
-### Step 1: Initialize CDLogger in your Application class
+### Step 1: Get Google Space Details
+
+Before initializing CDLogger, you need to obtain the details of the Google space where you want to
+log events. Follow these steps to get the space ID, space key, and space token:
+
+1. Navigate to "Gmail" > "Chats" > "New chat" > "Create a space".
+2. Provide the space details such as space name, description, and restrictions.
+3. After creating the space, go to "App & Integration" > "Webhooks" to get the space URL.
+4. Extract the space ID, space key, and space token from the URL. For example, if the URL
+   is:  https://chat.googleapis.com/v1/spaces/AAA/messages?key=AIzaSyDdI0hCZtE6&token=12eQX3gUIi7DdVJsv50ozfQwCX
+   then space details are :-
+
+- Space ID: AAA
+- Space Key: AIzaSyDdI0hCZtE6
+- Space Token: 12eQX3gUIi7DdVJsv50ozfQwCX
+
+### Step 2: Initialize CDLogger in your Application class
 
 In your `Application` class, initialize the `CDLogger` instance using the `CDLogger.Builder` class:
 
@@ -61,15 +78,23 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        CDLogger.Builder(this)
+        CDLogger.Builder(
+            this,
+            SpaceDetails(
+                spaceId = "your_space_id",
+                spaceKey = "space_key",
+                spaceToken = "space_token"
+            )
+        )
             .logActivityOpeningEvent(true) // Optional: Enable logging of activity opening events
             .logFragmentOpeningEvent(true) // Optional: Enable logging of fragment opening events
+            .logCrashEvent(true) // Optional: Enable logging of crash events
             .build()
     }
 }
 ```
 
-### Step 2: Log Events
+### Step 3: Log Events
 
 You can now use the `CDLogger` class to log events anywhere in your application:
 
