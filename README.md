@@ -61,9 +61,9 @@ log events. Follow these steps to get the space ID, space key, and space token:
 1. Navigate to "Gmail" > "Chats" > "New chat" > "Create a space".
 2. Provide the space details such as space name, description, and restrictions.
 3. After creating the space, go to "App & Integration" > "Webhooks" to get the space URL.
-4. Extract the space ID, space key, and space token from the URL. For example, if the URL
-   is:  https://chat.googleapis.com/v1/spaces/AAA/messages?key=AIzaSyDdI0hCZtE6&token=12eQX3gUIi7DdVJsv50ozfQwCX
-   then space details are :-
+4. Extract the space ID, space key, and space token from the URL. For example, for:
+
+https://chat.googleapis.com/v1/spaces/AAA/messages?key=AIzaSyDdI0hCZtE6&token=12eQX3gUIi7DdVJsv50ozfQwCX
 
 - Space ID: AAA
 - Space Key: AIzaSyDdI0hCZtE6
