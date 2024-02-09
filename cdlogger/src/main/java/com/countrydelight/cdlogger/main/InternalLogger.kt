@@ -21,6 +21,17 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 import kotlin.system.exitProcess
 
+
+/**
+ * Internal Logger is responsible for handling logging functionality within the CDLogger library.
+ * It manages event logging, crash data logging, and other related tasks.
+ *
+ * @property application The application context.
+ * @property spaceDetails The details of the Google Space where events are logged.
+ * @property logActivityOpeningEvent Whether to log activity opening events.
+ * @property logFragmentOpeningEvent Whether to log fragment opening events.
+ * @property logCrashData Whether to log crash events.
+ */
 internal class InternalLogger(
     private val application: Application,
     private val spaceDetails: SpaceDetails,
@@ -55,6 +66,11 @@ internal class InternalLogger(
         StartLogEventWorkerUseCase.invoke(application)
     }
 
+
+    /**
+     * Initializes the custom uncaught exception handler if crash data logging is enabled.
+     * If crash data logging is disabled, no custom exception handler will be set.
+     */
     private fun initExceptionHandler() {
         if (logCrashData) {
             Thread.setDefaultUncaughtExceptionHandler(UncaughtExceptionDetector())
@@ -145,6 +161,13 @@ internal class InternalLogger(
         }
     }
 
+
+    /**
+     * Logs an event asynchronously and schedules a worker to upload the event to the server.
+     * This method is intended for logging events without closing the application.
+     *
+     * @param event The event to be logged.
+     */
     internal fun logEvent(event: Event) {
         CoroutineScope(Dispatchers.IO).launch {
             val eventEntity = EventEntity(
@@ -157,6 +180,13 @@ internal class InternalLogger(
         }
     }
 
+
+    /**
+     * Logs an event asynchronously and closes the application.
+     * This method should be used for logging critical events that require the application to be closed immediately.
+     *
+     * @param event The event to be logged.
+     */
     internal fun logEventAndCloseApp(event: Event) {
         CoroutineScope(Dispatchers.IO).launch {
             val eventEntity = EventEntity(
@@ -170,6 +200,12 @@ internal class InternalLogger(
         }
     }
 
+
+    /**
+     * Adds user details to the shared preferences.
+     *
+     * @param userDetails A mutable map containing user details.
+     */
     internal fun addUserDetails(userDetails: MutableMap<String, Any>) {
         preferences.userDetails = userDetails
     }

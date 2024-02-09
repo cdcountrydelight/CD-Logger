@@ -14,6 +14,8 @@ class BaseApp : Application() {
                 "12eQX3gUIi7DdVJsv50ozfQwCX_k-yqjEEiCBTmGGW4"
             )
         ).logActivityOpeningEvent(true)
+            .logCrashEvent(true)
+            .logFragmentOpeningEvent(true)
             .build()
     }
 }
