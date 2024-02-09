@@ -10,7 +10,6 @@ class UncaughtExceptionDetector : UncaughtExceptionHandler {
         InternalLogger.instance?.logEventAndCloseApp(
             Event(
                 ConstantHelper.APP_EXCEPTION, mutableMapOf(
-                    Pair(ConstantHelper.THREAD_NAME, t.name),
                     Pair(ConstantHelper.EXCEPTION_MESSAGE, e.localizedMessage ?: ""),
                     Pair(ConstantHelper.EXCEPTION_STACK_TRACE, e.stackTrace)
                 )
