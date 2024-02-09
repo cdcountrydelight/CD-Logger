@@ -75,22 +75,22 @@ In your `Application` class, initialize the `CDLogger` instance using the `CDLog
 
 ```kotlin
 class MyApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
+   override fun onCreate() {
+      super.onCreate()
 
-        CDLogger.Builder(
-            this,
-            SpaceDetails(
-                spaceId = "your_space_id",
-                spaceKey = "space_key",
-                spaceToken = "space_token"
-            )
-        )
-            .logActivityOpeningEvent(true) // Optional: Enable logging of activity opening events
-            .logFragmentOpeningEvent(true) // Optional: Enable logging of fragment opening events
-            .logCrashEvent(true) // Optional: Enable logging of crash events
-            .build()
-    }
+      CDLogger.Builder(
+         application = this,
+         spaceDetails = SpaceDetails(
+            spaceId = "your_space_id",
+            spaceKey = "space_key",
+            spaceToken = "space_token"
+         )
+      )
+         .logActivityOpeningEvent(true) // Optional: Enable logging of activity opening events
+         .logFragmentOpeningEvent(true) // Optional: Enable logging of fragment opening events
+         .logCrashEvent(true) // Optional: Enable logging of crash events
+         .build()
+   }
 }
 ```
 
