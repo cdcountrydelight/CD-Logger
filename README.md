@@ -1,53 +1,68 @@
 # CDLogger Library
 
-CDLogger is a logging utility library for Android applications that simplifies the process of
-logging user events, activities, fragments and app crash.
+CDLogger is an Android library designed to facilitate automatic event logging within applications.
+It offers seamless logging of various events such as activity openings, fragment openings,
+application crashes, and custom events. This library streamlines the logging process by
+automatically capturing these events without requiring manual intervention, thereby enhancing the
+efficiency of logging operations. Furthermore, CDLogger provides functionality for logging user
+details alongside events, enabling developers to gather comprehensive data insights.
 
-## Features
+![Platform](https://img.shields.io/badge/Platform-Android-lightseagreen) &nbsp;
+![API Level](https://img.shields.io/badge/API-21%2B-steelblue) &nbsp;
+[![](https://jitpack.io/v/cdcountrydelight/CD-Logger.svg)](https://jitpack.io/#cdcountrydelight/CD-Logger)
+&nbsp;
+![Language](https://img.shields.io/badge/Language-Kotlin-orange)
 
-- Log custom events with detailed event information.
-- Automatically log activity and fragment opening events.
-- Automatically log app crash events.
-- Customizable options for logging activity , fragment and crash events.
+## Key Features
 
-## Installation
+CDLogger provides the following features:
+
+- **Activity Opening Events:** Automatically logs the opening of activities, including those
+  extending `AppCompatActivity` or `FragmentActivity`.
+- **Fragment Opening Events:** Automatically logs the opening of fragments.
+- **Application Crashes:** Automatically captures and logs application crashes.
+- **Custom Events:** Provides functions to log custom events with optional user details.
+
+## Requirements
+
+CDLogger has the following dependencies:
+
+- Gson: `com.google.code.gson:gson:2.10.1`
+- Room: `androidx.room:room-runtime:2.6.1`
+- WorkManager: `androidx.work:work-runtime-ktx:2.9.0`
+- Ktor: `io.ktor:ktor-client-android:2.3.7`
+
+Ensure that your app's build.gradle file specifies the following minimum versions for compatibility
+with CDLogger.
+
+## Getting Started
 
 To integrate CDLogger into your Android project, follow these steps:
 
-### Step 1: Download the AAR File
+### Step 1: Add the JitPack repository to your gradle file
 
-Download the `cdlogger-debug.aar` file
-from  [here](cdlogger-debug.aar).
-
-### Step 2: Include AAR File
-
-1. Navigate to your project's `app` folder.
-2. Create a `libs` folder if it doesn't already exist.
-3. Place the `cdlogger-debug.aar` file in the `libs` folder.
-
-### Step 3: Modify `build.gradle` (app)
-
-Add the following line to your app-level `build.gradle` file to include the AAR file:
+Add it in your `settings.gradle` file at the end of repositories:
 
 ```kotlin
-implementation files ('libs/cdlogger-debug.aar')
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven(url = "https://jitpack.io")
+    }
+}
 ```
 
-or to add all aar files inside libs folder use:-
+### Step 2: Add the dependency
+
+Add it in your `build.gradle` (module level) file:
 
 ```kotlin
-implementation fileTree (dir: 'libs', include: ['*.aar'])
+dependencies {
+    implementation("com.github.cdcountrydelight:CD-Logger:<latest-version>")
+}
 ```
-
-### Step 4: Sync Gradle
-
-After modifying your `build.gradle` file, sync your project with Gradle to apply the changes:
-
-1. Click on the "Sync Project with Gradle Files" icon in the toolbar.
-2. Alternatively, go to "File" > "Sync Project with Gradle Files" in the menu.
-
-This will ensure that the CDLogger library is properly included in your project and any changes made
-to the dependencies are applied.
 
 ## Usage
 
@@ -58,16 +73,20 @@ To start using CDLogger in your application, follow these steps:
 Before initializing CDLogger, you need to obtain the details of the Google space where you want to
 log events. Follow these steps to get the space ID, space key, and space token:
 
-1. Navigate to "Gmail" > "Chats" > "New chat" > "Create a space".
-2. Provide the space details such as space name, description, and restrictions.
-3. After creating the space, go to "App & Integration" > "Webhooks" to get the space URL.
-4. Extract the space ID, space key, and space token from the URL. For example, for:
+    1. Navigate to "Gmail" > "Chats" > "New chat" > "Create a space".
 
-https://chat.googleapis.com/v1/spaces/AAA/messages?key=AIzaSyDdI0hCZtE6&token=12eQX3gUIi7DdVJsv50ozfQwCX
+    2. Provide the space details such as space name, description, and restrictions.
 
-- Space ID: AAA
-- Space Key: AIzaSyDdI0hCZtE6
-- Space Token: 12eQX3gUIi7DdVJsv50ozfQwCX
+    3. After creating the space, go to "App & Integration" > "Webhooks" to get the space URL.
+    
+    4. Extract the space ID, space key, and space token from the URL. 
+
+    For example, for:
+    https://chat.googleapis.com/v1/spaces/AAA/messages?key=AIzaSyDdI0hCZtE6&token=12eQX3gUIi7DdVJsv50ozfQwCX
+
+        - Space ID: AAA
+        - Space Key: AIzaSyDdI0hCZtE6
+        - Space Token: 12eQX3gUIi7DdVJsv50ozfQwCX
 
 ### Step 2: Initialize CDLogger in your Application class
 
@@ -81,7 +100,7 @@ class MyApplication : Application() {
       CDLogger.Builder(
          application = this,
          spaceDetails = SpaceDetails(
-            spaceId = "your_space_id",
+             spaceId = "space_id",
             spaceKey = "space_key",
             spaceToken = "space_token"
          )
@@ -112,13 +131,4 @@ val userDetails = mutableMapOf(
 CDLogger.addUserDetails(userDetails)
 ```
 
-## Dependencies
 
-CDLogger has the following dependencies:
-
-- Gson: `com.google.code.gson:gson:2.10.1`
-- Room: `androidx.room:room-runtime:2.6.1`
-- WorkManager: `androidx.work:work-runtime-ktx:2.9.0`
-- Ktor: `io.ktor:ktor-client-android:2.3.7`
-
-Make sure to include these dependencies in your app's `build.gradle` file.
