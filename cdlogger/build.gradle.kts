@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("maven-publish")
     kotlin("kapt")
 }
 
@@ -62,4 +63,17 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
 
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                groupId = "com.github.cdcountrydelight"
+                artifactId = "CD-Logger"
+                version = "1.0.0"
+                from(components["release"])
+            }
+        }
+    }
 }
