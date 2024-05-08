@@ -8,8 +8,8 @@ import com.countrydelight.cdlogger.data.remote.response.ResponseStatusEnum
 import com.countrydelight.cdlogger.domain.usecases.DeleteEventFromLocalUseCase
 import com.countrydelight.cdlogger.domain.usecases.GetAllEventsFromLocalUseCase
 import com.countrydelight.cdlogger.domain.usecases.SendEventDataToRemoteUseCase
+import com.countrydelight.cdlogger.domain.utils.DomainConstantHelper.LOG_TAG
 import com.countrydelight.cdlogger.domain.utils.SharedPreferenceHelper
-import com.countrydelight.cdlogger.main.utils.ConstantHelper.LOG_TAG
 import kotlinx.coroutines.runBlocking
 
 

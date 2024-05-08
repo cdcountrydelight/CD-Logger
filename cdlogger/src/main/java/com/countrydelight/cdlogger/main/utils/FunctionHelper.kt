@@ -1,7 +1,7 @@
 package com.countrydelight.cdlogger.main.utils
 
 import android.util.Log
-import com.countrydelight.cdlogger.main.utils.ConstantHelper.LOG_TAG
+import com.countrydelight.cdlogger.domain.utils.DomainConstantHelper.LOG_TAG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
