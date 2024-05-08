@@ -45,12 +45,12 @@ Add it in your `settings.gradle` file at the end of repositories:
 
 ```kotlin
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-        maven(url = "https://jitpack.io")
-    }
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+  repositories {
+    google()
+    mavenCentral()
+    maven(url = "https://jitpack.io")
+  }
 }
 ```
 
@@ -60,7 +60,7 @@ Add it in your `build.gradle` (module level) file:
 
 ```kotlin
 dependencies {
-    implementation("com.github.cdcountrydelight:CD-Logger:<latest-version>")
+  implementation("com.github.cdcountrydelight:CD-Logger:<latest-version>")
 }
 ```
 
@@ -94,41 +94,52 @@ In your `Application` class, initialize the `CDLogger` instance using the `CDLog
 
 ```kotlin
 class MyApplication : Application() {
-   override fun onCreate() {
-      super.onCreate()
+  override fun onCreate() {
+    super.onCreate()
 
-      CDLogger.Builder(
-         application = this,
-         spaceDetails = SpaceDetails(
-             spaceId = "space_id",
-            spaceKey = "space_key",
-            spaceToken = "space_token"
-         )
+    CDLogger.Builder(
+      application = this,
+      spaceDetails = SpaceDetails(
+        spaceId = "space_id",
+        spaceKey = "space_key",
+        spaceToken = "space_token"
       )
-         .logActivityOpeningEvent(true) // Optional: Enable logging of activity opening events
-         .logFragmentOpeningEvent(true) // Optional: Enable logging of fragment opening events
-         .logCrashEvent(true) // Optional: Enable logging of crash events
-         .build()
-   }
+    )
+      .logActivityOpeningEvent(true) // Optional: Enable logging of activity opening events
+      .logFragmentOpeningEvent(true) // Optional: Enable logging of fragment opening events
+      .logCrashEvent(true) // Optional: Enable logging of crash events
+      .build()
+  }
 }
 ```
 
 ### Step 3: Log Events
 
-You can now use the `CDLogger` class to log events anywhere in your application:
+To incorporate user details for the purpose of user identification, adhere to the following
+procedure:
 
 ```kotlin
-// Log a custom event
-val event = Event(eventName = "ButtonClicked", eventData = mapOf("buttonId" to "loginButton"))
-CDLogger.logEvent(event)
-
-// Add user details
 val userDetails = mutableMapOf(
-    "userId" to "123456",
-    "userName" to "John Doe",
-    // Add more user details as needed
+  "userId" to "123456",
+  "userName" to "John Doe",
+  // Add more user details as needed
 )
 CDLogger.addUserDetails(userDetails)
+
+```
+
+To log custom events, utilize any of the following available methods:
+
+```kotlin
+1.CDLogger.logEvent(eventName: String, eventData: MutableMap< String, Any >)
+
+2.CDLogger.logEvent(eventName: String, eventMessage: String)
+```
+
+To check whether logger is initialized use:-
+
+```kotlin
+CDLogger.isLoggerInitialized()
 ```
 
 
