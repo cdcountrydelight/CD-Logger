@@ -1,7 +1,6 @@
 package com.countrydelight.cdlogger.main
 
 import android.app.Application
-import com.countrydelight.cdlogger.domain.models.Event
 import com.countrydelight.cdlogger.domain.models.SpaceDetails
 
 
@@ -13,14 +12,34 @@ class CDLogger {
     companion object {
 
         /**
-         * Logs an event.
+         * Checks if the logger is initialized.
          *
-         * @param event The event to log.
+         * @return `true` if the logger is initialized, `false` otherwise.
          */
+        fun isLoggerInitialized() = InternalLogger.instance != null
 
-        fun logEvent(event: Event) {
-            InternalLogger.instance?.logEvent(event)
+
+        /**
+         * Logs an event with the provided event name and event message.
+         *
+         * @param eventName The name of the event to log.
+         * @param eventMessage The message associated with the event.
+         */
+        fun logEvent(eventName: String, eventMessage: String) {
+            InternalLogger.instance?.logEvent(eventName, eventMessage)
         }
+
+
+        /**
+         * Logs an event with the provided event name and event data.
+         *
+         * @param eventName The name of the event to log.
+         * @param eventData A mutable map containing additional data associated with the event.
+         */
+        fun logEvent(eventName: String, eventData: MutableMap<String, Any>) {
+            InternalLogger.instance?.logEvent(eventName, eventData)
+        }
+
 
         /**
          * Will log user details using the application.

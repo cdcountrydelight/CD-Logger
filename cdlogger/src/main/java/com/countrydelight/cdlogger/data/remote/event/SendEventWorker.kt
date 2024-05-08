@@ -5,12 +5,11 @@ import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.countrydelight.cdlogger.data.remote.response.ResponseStatusEnum
-import com.countrydelight.cdlogger.data.utils.DataConstantHelper
-import com.countrydelight.cdlogger.data.utils.DataFunctionHelper
 import com.countrydelight.cdlogger.domain.usecases.DeleteEventFromLocalUseCase
 import com.countrydelight.cdlogger.domain.usecases.GetAllEventsFromLocalUseCase
 import com.countrydelight.cdlogger.domain.usecases.SendEventDataToRemoteUseCase
 import com.countrydelight.cdlogger.domain.utils.SharedPreferenceHelper
+import com.countrydelight.cdlogger.main.utils.ConstantHelper.LOG_TAG
 import kotlinx.coroutines.runBlocking
 
 
@@ -53,16 +52,12 @@ internal class SendEventWorker(context: Context, workerParameters: WorkerParamet
                 val response = sendEventDataToRemoteUseCase(eventToSend, preference.spaceDetails)
                 if (response.status == ResponseStatusEnum.Success) {
                     deleteEventFromLocalUseCase(event)
-                    if (DataFunctionHelper.isInDebugMode()) {
-                        Log.i(DataConstantHelper.LOG_TAG, "Success on event: ${event.toEvent()}")
-                    }
+                    Log.i(LOG_TAG, "Success on event: ${event.toDisplayEvent()}")
                 } else {
-                    if (DataFunctionHelper.isInDebugMode()) {
-                        Log.e(
-                            DataConstantHelper.LOG_TAG,
-                            "Exception on event: ${event.toEvent()} with error code: ${response.statusCode}, error message: ${response.message}"
-                        )
-                    }
+                    Log.e(
+                        LOG_TAG,
+                        "Exception on event: ${event.toDisplayEvent()} with error code: ${response.statusCode}, error message: ${response.message}"
+                    )
                 }
             }
         }

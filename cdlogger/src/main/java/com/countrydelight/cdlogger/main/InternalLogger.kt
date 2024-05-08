@@ -7,14 +7,16 @@ import android.provider.Settings
 import android.util.Log
 import com.countrydelight.cdlogger.data.local.event.EventEntity
 import com.countrydelight.cdlogger.domain.models.DeviceDetails
-import com.countrydelight.cdlogger.domain.models.Event
 import com.countrydelight.cdlogger.domain.models.SpaceDetails
 import com.countrydelight.cdlogger.domain.usecases.AddEventToLocalUseCase
 import com.countrydelight.cdlogger.domain.usecases.StartLogEventWorkerUseCase
 import com.countrydelight.cdlogger.domain.utils.SharedPreferenceHelper
 import com.countrydelight.cdlogger.main.detectors.exception.UncaughtExceptionDetector
 import com.countrydelight.cdlogger.main.detectors.screen.ActivityLifecycleDetector
+import com.countrydelight.cdlogger.main.utils.ConstantHelper.LOG_TAG
+import com.countrydelight.cdlogger.main.utils.ConstantHelper.MESSAGE
 import com.countrydelight.cdlogger.main.utils.FunctionHelper
+import com.countrydelight.cdlogger.main.utils.FunctionHelper.backgroundCall
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -125,10 +127,9 @@ internal class InternalLogger(
             try {
                 val contentResolver = application.contentResolver
                 val advertisingId = Settings.Secure.getString(contentResolver, "advertising_id")
-                Log.e("abc", "getAdvertisingId: $advertisingId")
                 preferences.advertisingId = advertisingId
             } catch (e: Exception) {
-                Log.e("abc", "getAdvertisingId: ${e.localizedMessage}")
+                Log.e(LOG_TAG, "Get Advertising Id failed with message : ${e.localizedMessage}")
             }
         }
     }
@@ -163,41 +164,68 @@ internal class InternalLogger(
 
 
     /**
-     * Logs an event asynchronously and schedules a worker to upload the event to the server.
-     * This method is intended for logging events without closing the application.
+     * Logs an event internally with the provided event name and event data.
      *
-     * @param event The event to be logged.
+     * @param eventName The name of the event to log.
+     * @param eventData Additional data associated with the event.
      */
-    internal fun logEvent(event: Event) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val eventEntity = EventEntity(
-                eventName = event.eventName,
-                eventData = event.eventData,
-                createdAt = FunctionHelper.getCurrentTimeInMillis()
-            )
-            addEventToLocalUseCase(eventEntity)
-            StartLogEventWorkerUseCase.invoke(application)
-        }
+    private suspend fun logEventInternally(eventName: String, eventData: MutableMap<String, Any>) {
+        val eventEntity = EventEntity(
+            eventName = eventName,
+            eventData = eventData,
+            createdAt = FunctionHelper.getCurrentTimeInMillis()
+        )
+        addEventToLocalUseCase(eventEntity)
+        StartLogEventWorkerUseCase.invoke(application)
+    }
+
+    /**
+     * Logs an event with the provided event name and event message.
+     *
+     * This function internally calls [logEventInternally] to log the event with the given name and message.
+     * The event message is stored in the event data under the key [MESSAGE].
+     *
+     * @param eventName The name of the event to log.
+     * @param eventMessage The message associated with the event.
+     */
+    fun logEvent(eventName: String, eventMessage: String) {
+        backgroundCall(call = {
+            logEventInternally(eventName, mutableMapOf(Pair(MESSAGE, eventMessage)))
+        })
     }
 
 
     /**
-     * Logs an event asynchronously and closes the application.
-     * This method should be used for logging critical events that require the application to be closed immediately.
+     * Logs an event with the provided event name and event data.
      *
-     * @param event The event to be logged.
+     * This function internally calls [logEventInternally] to log the event with the given name and data.
+     *
+     * @param eventName The name of the event to log.
+     * @param eventData A mutable map containing additional data associated with the event.
      */
-    internal fun logEventAndCloseApp(event: Event) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val eventEntity = EventEntity(
-                eventName = event.eventName,
-                eventData = event.eventData,
-                createdAt = FunctionHelper.getCurrentTimeInMillis()
-            )
-            addEventToLocalUseCase(eventEntity)
+    fun logEvent(eventName: String, eventData: MutableMap<String, Any>) {
+        backgroundCall(call = {
+            logEventInternally(eventName, eventData)
+        })
+    }
+
+
+    /**
+     * Logs an event with the provided event name and event data, then closes the application.
+     *
+     * This function internally calls [logEventInternally] to log the event with the given name and data.
+     * After logging the event, it forcefully terminates the application process.
+     *
+     * @param eventName The name of the event to log.
+     * @param eventData A mutable map containing additional data associated with the event.
+     */
+    internal fun logEventAndCloseApp(eventName: String, eventData: MutableMap<String, Any>) {
+        backgroundCall(call = {
+            logEventInternally(eventName, eventData)
+        }, onCompletion = {
             android.os.Process.killProcess(android.os.Process.myPid())
             exitProcess(10)
-        }
+        })
     }
 
 

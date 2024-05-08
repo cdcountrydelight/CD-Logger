@@ -10,4 +10,6 @@ internal object ConstantHelper {
     const val APP_EXCEPTION = "app_exception"
     const val EXCEPTION_MESSAGE = "exception_message"
     const val EXCEPTION_STACK_TRACE = "stack_trace"
+    const val MESSAGE = "message"
+    const val LOG_TAG = "CDLogger"
 }

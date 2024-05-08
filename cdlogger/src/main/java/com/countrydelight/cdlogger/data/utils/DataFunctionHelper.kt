@@ -1,6 +1,5 @@
 package com.countrydelight.cdlogger.data.utils
 
-import com.countrydelight.cdlogger.BuildConfig
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -20,13 +19,5 @@ internal object DataFunctionHelper {
         val date = Date(millis)
         return sdf.format(date)
     }
-
-
-    /**
-     * Checks if the library is in debug mode.
-     *
-     * @return true if the app is in debug mode, false otherwise.
-     */
-    fun isInDebugMode(): Boolean = BuildConfig.BUILD_TYPE == "debug"
 
 }

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CountryDelightLogger</string>
+    <string name="create_exception_on_main_thread">Create Exception On Main Thread</string>
+    <string name="create_exception_on_background_thread">Create Exception On Background Thread</string>
+    <string name="send_string_data_to_server">Send String Data To Server</string>
+    <string name="send_hashmao_data_to_server">Send HashMao Data To Server</string>
 </resources>

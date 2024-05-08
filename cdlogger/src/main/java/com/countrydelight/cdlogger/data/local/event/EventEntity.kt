@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.countrydelight.cdlogger.data.remote.event.EventRemoteEntity
 import com.countrydelight.cdlogger.data.utils.DataFunctionHelper
-import com.countrydelight.cdlogger.domain.models.Event
 
 
 /**
@@ -24,13 +23,16 @@ internal data class EventEntity(
     val createdAt: Long
 ) {
 
+
     /**
-     * Converts the event entity to an Event object.
+     * Converts the event to a displayable string format.
      *
-     * @return The Event object.
+     * This function returns a string representation of the event in a displayable format.
+     *
+     * @return A string representing the event in a displayable format.
      */
-    fun toEvent(): Event {
-        return Event(eventName = eventName, eventData = eventData)
+    fun toDisplayEvent(): String {
+        return "{ \"eventName\": \"$eventName\",  \"eventData\": \"$eventData\" }"
     }
 
     /**

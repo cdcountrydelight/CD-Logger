@@ -5,7 +5,6 @@ import android.app.Application
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
-import com.countrydelight.cdlogger.domain.models.Event
 import com.countrydelight.cdlogger.main.CDLogger
 import com.countrydelight.cdlogger.main.utils.ConstantHelper
 
@@ -23,13 +22,11 @@ internal class ActivityLifecycleDetector(
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         if (logActivityOpeningEvent) {
             CDLogger.logEvent(
-                Event(
-                    eventName = ConstantHelper.SCREEN_OPENED,
-                    eventData = mutableMapOf(
-                        Pair(
-                            ConstantHelper.SCREEN_NAME,
-                            activity::class.simpleName ?: ""
-                        )
+                eventName = ConstantHelper.SCREEN_OPENED,
+                eventData = mutableMapOf(
+                    Pair(
+                        ConstantHelper.SCREEN_NAME,
+                        activity::class.simpleName ?: ""
                     )
                 )
             )

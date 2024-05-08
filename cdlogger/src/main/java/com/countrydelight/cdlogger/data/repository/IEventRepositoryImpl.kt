@@ -5,10 +5,10 @@ import com.countrydelight.cdlogger.data.local.CDLoggerDatabase
 import com.countrydelight.cdlogger.data.local.event.EventEntity
 import com.countrydelight.cdlogger.data.remote.RemoteRepository
 import com.countrydelight.cdlogger.data.remote.event.SendDataToRemoteEntity
+import com.countrydelight.cdlogger.data.remote.event.SpaceRequestModel
 import com.countrydelight.cdlogger.data.remote.response.ResponseState
 import com.countrydelight.cdlogger.domain.models.SpaceDetails
 import com.countrydelight.cdlogger.domain.repository.IEventRepository
-import com.countrydelight.cdlogger.data.remote.event.SpaceRequestModel
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 
