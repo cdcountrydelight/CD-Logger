@@ -8,8 +8,8 @@ class UncaughtExceptionDetector : UncaughtExceptionHandler {
     override fun uncaughtException(t: Thread, e: Throwable) {
         InternalLogger.instance?.logEventAndCloseApp(
             ConstantHelper.APP_EXCEPTION, mutableMapOf(
-                Pair(ConstantHelper.EXCEPTION_MESSAGE, e.localizedMessage ?: ""),
-                Pair(ConstantHelper.EXCEPTION_STACK_TRACE, e.stackTrace)
+                ConstantHelper.EXCEPTION_MESSAGE to (e.localizedMessage?.toString() ?: ""),
+                ConstantHelper.EXCEPTION_STACK_TRACE to e.stackTrace
             )
         )
     }

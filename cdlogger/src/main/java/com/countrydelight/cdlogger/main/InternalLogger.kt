@@ -181,7 +181,7 @@ internal class InternalLogger(
      */
     internal fun logEvent(eventName: String, eventMessage: String) {
         backgroundCall(call = {
-            logEventInternally(eventName, mutableMapOf(Pair(MESSAGE, eventMessage)))
+            logEventInternally(eventName, mutableMapOf(MESSAGE to eventMessage))
         })
     }
 

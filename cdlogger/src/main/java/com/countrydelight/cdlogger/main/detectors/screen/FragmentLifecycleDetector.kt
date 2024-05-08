@@ -11,18 +11,17 @@ import com.countrydelight.cdlogger.main.utils.ConstantHelper
  * A FragmentManager.FragmentLifecycleCallbacks implementation that logs fragment opening events.
  */
 internal class FragmentLifecycleDetector : FragmentManager.FragmentLifecycleCallbacks() {
-    override fun onFragmentCreated(fm: FragmentManager, f: Fragment, savedInstanceState: Bundle?) {
-        super.onFragmentCreated(fm, f, savedInstanceState)
-        val fragmentName = f::class.simpleName
+    override fun onFragmentCreated(
+        fm: FragmentManager,
+        fragment: Fragment,
+        savedInstanceState: Bundle?
+    ) {
+        super.onFragmentCreated(fm, fragment, savedInstanceState)
+        val fragmentName = fragment::class.simpleName
         if (fragmentName != "NavHostFragment") {
             CDLogger.logEvent(
                 eventName = ConstantHelper.SCREEN_OPENED,
-                eventData = mutableMapOf(
-                    Pair(
-                        ConstantHelper.SCREEN_NAME,
-                        f::class.simpleName ?: ""
-                    )
-                )
+                eventData = mutableMapOf(ConstantHelper.SCREEN_NAME to (fragmentName ?: ""))
             )
         }
 

@@ -24,10 +24,7 @@ internal class ActivityLifecycleDetector(
             CDLogger.logEvent(
                 eventName = ConstantHelper.SCREEN_OPENED,
                 eventData = mutableMapOf(
-                    Pair(
-                        ConstantHelper.SCREEN_NAME,
-                        activity::class.simpleName ?: ""
-                    )
+                    ConstantHelper.SCREEN_NAME to (activity::class.simpleName ?: "")
                 )
             )
         }
