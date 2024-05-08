@@ -20,14 +20,6 @@ internal class ActivityLifecycleDetector(
     Application.ActivityLifecycleCallbacks {
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        if (logActivityOpeningEvent) {
-            CDLogger.logEvent(
-                eventName = ConstantHelper.SCREEN_OPENED,
-                eventData = mutableMapOf(
-                    ConstantHelper.SCREEN_NAME to (activity::class.simpleName ?: "")
-                )
-            )
-        }
         if (logFragmentOpeningEvent) {
             if (activity is AppCompatActivity) {
                 activity.supportFragmentManager.registerFragmentLifecycleCallbacks(
@@ -47,6 +39,14 @@ internal class ActivityLifecycleDetector(
     }
 
     override fun onActivityResumed(activity: Activity) {
+        if (logActivityOpeningEvent) {
+            CDLogger.logEvent(
+                eventName = ConstantHelper.SCREEN_OPENED,
+                eventData = mutableMapOf(
+                    ConstantHelper.SCREEN_NAME to (activity::class.simpleName ?: "")
+                )
+            )
+        }
     }
 
     override fun onActivityPaused(activity: Activity) {

@@ -1,5 +1,6 @@
 package com.countrydelight.countrydelightlogger
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -16,21 +17,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         CDLogger.addUserDetails(mutableMapOf("user_name" to "I am Grute", "user_id" to "12345"))
-        binding.sendHashMapDataToServerBtn.setOnClickListener {
-            CDLogger.logEvent("View Click", mutableMapOf(Pair("view_name", (it as Button).text)))
-        }
-        binding.sendStringDataToServer.setOnClickListener {
-            CDLogger.logEvent("View Click", (it as Button).text.toString())
-        }
-        binding.createExceptionOnMainThreadBtn.setOnClickListener {
-            throw RuntimeException("Testing Exception On Main Thread")
-        }
+        with(binding) {
+            sendHashMapDataToServerBtn.setOnClickListener {
+                CDLogger.logEvent(
+                    "View Click",
+                    mutableMapOf(Pair("view_name", (it as Button).text))
+                )
+            }
+            sendStringDataToServer.setOnClickListener {
+                CDLogger.logEvent("View Click", (it as Button).text.toString())
+            }
+            createExceptionOnMainThreadBtn.setOnClickListener {
+                throw RuntimeException("Testing Exception On Main Thread")
+            }
 
-        binding.createExceptionOnBackgroundThreadBtn.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                throw RuntimeException("Testing Exception On Background Thread")
+            createExceptionOnBackgroundThreadBtn.setOnClickListener {
+                CoroutineScope(Dispatchers.IO).launch {
+                    throw RuntimeException("Testing Exception On Background Thread")
+                }
+            }
+            navigateToSecondActivityBtn.setOnClickListener {
+                startActivity(Intent(this@MainActivity, SecondActivity::class.java))
             }
         }
+
     }
 }

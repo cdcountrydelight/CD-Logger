@@ -4,4 +4,8 @@
     <string name="create_exception_on_background_thread">Create Exception On Background Thread</string>
     <string name="send_string_data_to_server">Send String Data To Server</string>
     <string name="send_hashmao_data_to_server">Send HashMao Data To Server</string>
+    <string name="navigate_to_second_activity">Navigate To Second Activity</string>
+    <string name="navigate_to_second_fragment">Navigate To Second Fragment</string>
+    <string name="navigate_to_previous_activity">Navigate To Previous Activity</string>
+    <string name="navigate_to_previous_fragment">Navigate To Previous Fragment</string>
 </resources>
