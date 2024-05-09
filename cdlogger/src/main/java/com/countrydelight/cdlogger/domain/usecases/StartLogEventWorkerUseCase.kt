@@ -6,8 +6,8 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import com.countrydelight.cdlogger.base.utils.BaseConstantHelper
 import com.countrydelight.cdlogger.data.remote.event.SendEventWorker
-import com.countrydelight.cdlogger.domain.utils.DomainConstantHelper
 
 
 /**
@@ -33,12 +33,12 @@ internal object StartLogEventWorkerUseCase {
                         .build()
                 )
                 // Add a tag to the work request.
-                .addTag(DomainConstantHelper.WORKER_TAG)
+                .addTag(BaseConstantHelper.WORKER_TAG)
                 .build()
 
         WorkManager.getInstance(context).enqueueUniqueWork(
             // Enqueue the work request with a unique tag.
-            DomainConstantHelper.WORKER_TAG,
+            BaseConstantHelper.WORKER_TAG,
             // Keep the existing work if there is a conflict.
             ExistingWorkPolicy.KEEP,
             uploadWorkRequest

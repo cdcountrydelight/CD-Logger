@@ -1,7 +1,7 @@
 package com.countrydelight.cdlogger.data.remote
 
 import android.util.Log
-import com.countrydelight.cdlogger.domain.utils.DomainConstantHelper.LOG_TAG
+import com.countrydelight.cdlogger.base.utils.BaseConstantHelper.LOG_TAG
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.DefaultRequest

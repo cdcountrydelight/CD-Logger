@@ -1,7 +1,6 @@
 package com.countrydelight.cdlogger.main.utils
 
-import android.util.Log
-import com.countrydelight.cdlogger.domain.utils.DomainConstantHelper.LOG_TAG
+import com.countrydelight.cdlogger.main.InternalLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,15 +27,18 @@ internal object FunctionHelper {
      *
      * @param call The suspended function to be executed in the background.
      * @param onCompletion A lambda function to be executed upon completion of the background call. Default is an empty lambda.
+     * @param logMessageTag The tag to be used in the log message for any caught exceptions. Default is "Background Call Failed with message".
      */
-    fun backgroundCall(call: suspend () -> Unit, onCompletion: () -> Unit = {}) {
+    internal fun backgroundCall(
+        call: suspend () -> Unit,
+        onCompletion: () -> Unit = {},
+        logMessageTag: String = "Background Call"
+    ) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 call()
             } catch (exception: Exception) {
-                Log.e(
-                    LOG_TAG, "Background Call Failed with message :${exception.localizedMessage}"
-                )
+                InternalLogger.loggerFailureCallback?.onLoggerFailure(logMessageTag, exception)
             }
         }.invokeOnCompletion {
             onCompletion()

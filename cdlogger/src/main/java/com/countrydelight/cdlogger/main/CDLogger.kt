@@ -1,6 +1,7 @@
 package com.countrydelight.cdlogger.main
 
 import android.app.Application
+import com.countrydelight.cdlogger.base.utils.ILoggerFailureCallback
 import com.countrydelight.cdlogger.domain.models.SpaceDetails
 
 
@@ -64,6 +65,7 @@ class CDLogger {
         private var logActivityOpeningEvent: Boolean = false
         private var logFragmentOpeningEvent: Boolean = false
         private var logCrashData: Boolean = true
+        private var loggerFailureCallback: ILoggerFailureCallback? = null
 
         /**
          * Sets whether to log activity opening events.
@@ -74,6 +76,18 @@ class CDLogger {
          */
         fun logActivityOpeningEvent(logActivityOpeningEvent: Boolean): Builder {
             this.logActivityOpeningEvent = logActivityOpeningEvent
+            return this
+        }
+
+
+        /**
+         * Registers a callback to handle logger failure events.
+         *
+         * @param callback The callback to handle logger failure events.
+         * @return This Builder instance to allow for method chaining.
+         */
+        fun registerLoggerFailureCallbacks(callback: ILoggerFailureCallback): Builder {
+            this.loggerFailureCallback = callback
             return this
         }
 
@@ -112,7 +126,8 @@ class CDLogger {
                 spaceDetails = spaceDetails,
                 logActivityOpeningEvent = logActivityOpeningEvent,
                 logFragmentOpeningEvent = logFragmentOpeningEvent,
-                logCrashData = logCrashData
+                logCrashData = logCrashData,
+                loggerFailureCallback = loggerFailureCallback
             )
         }
     }

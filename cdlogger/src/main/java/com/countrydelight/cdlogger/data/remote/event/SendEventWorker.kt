@@ -4,12 +4,13 @@ import android.content.Context
 import android.util.Log
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.countrydelight.cdlogger.base.utils.BaseConstantHelper.LOG_TAG
+import com.countrydelight.cdlogger.base.utils.SharedPreferenceHelper
 import com.countrydelight.cdlogger.data.remote.response.ResponseStatusEnum
 import com.countrydelight.cdlogger.domain.usecases.DeleteEventFromLocalUseCase
 import com.countrydelight.cdlogger.domain.usecases.GetAllEventsFromLocalUseCase
 import com.countrydelight.cdlogger.domain.usecases.SendEventDataToRemoteUseCase
-import com.countrydelight.cdlogger.domain.utils.DomainConstantHelper.LOG_TAG
-import com.countrydelight.cdlogger.domain.utils.SharedPreferenceHelper
+import com.countrydelight.cdlogger.main.InternalLogger
 import kotlinx.coroutines.runBlocking
 
 
@@ -39,27 +40,35 @@ internal class SendEventWorker(context: Context, workerParameters: WorkerParamet
      */
     override fun doWork(): Result {
         runBlocking {
-            val eventList = getAllEventsFromLocalUseCase()
-            eventList.forEach { event ->
-                val eventToSend = SendDataToRemoteEntity(
-                    preference.appName,
-                    preference.appUID,
-                    preference.advertisingId,
-                    preference.userDetails,
-                    preference.deviceDetails,
-                    event.toEventRemoteEntity()
-                )
-                val response = sendEventDataToRemoteUseCase(eventToSend, preference.spaceDetails)
-                if (response.status == ResponseStatusEnum.Success) {
-                    deleteEventFromLocalUseCase(event)
-                    Log.i(LOG_TAG, "Success on event: ${event.toDisplayEvent()}")
-                } else {
-                    Log.e(
-                        LOG_TAG,
-                        "Exception on event: ${event.toDisplayEvent()} with error code: ${response.statusCode}, error message: ${response.message}"
+            try {
+                val eventList = getAllEventsFromLocalUseCase()
+                eventList.forEach { event ->
+                    val eventToSend = SendDataToRemoteEntity(
+                        preference.appName,
+                        preference.appUID,
+                        preference.advertisingId,
+                        preference.userDetails,
+                        preference.deviceDetails,
+                        event.toEventRemoteEntity()
                     )
+                    val response =
+                        sendEventDataToRemoteUseCase(eventToSend, preference.spaceDetails)
+                    if (response.status == ResponseStatusEnum.Success) {
+                        deleteEventFromLocalUseCase(event)
+                        Log.i(LOG_TAG, "Success on event: ${event.toDisplayEvent()}")
+                    } else {
+                        val exceptionMessage =
+                            "Sending Event : ${event.toDisplayEvent()} To Remote Failed With Message : ${response.message}"
+                        InternalLogger.loggerFailureCallback?.onLoggerFailure(
+                            "Remote Sync",
+                            Exception(exceptionMessage)
+                        )
+                    }
                 }
+            } catch (exception: Exception) {
+                InternalLogger.loggerFailureCallback?.onLoggerFailure("Remote Sync", exception)
             }
+
         }
         return Result.success()
     }

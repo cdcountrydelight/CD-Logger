@@ -1,4 +1,4 @@
-package com.countrydelight.cdlogger.domain.utils
+package com.countrydelight.cdlogger.base.utils
 
 import android.content.Context
 import android.content.SharedPreferences

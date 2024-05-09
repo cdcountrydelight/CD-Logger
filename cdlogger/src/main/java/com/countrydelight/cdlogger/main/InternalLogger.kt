@@ -4,12 +4,13 @@ import android.app.Application
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
+import com.countrydelight.cdlogger.base.utils.ILoggerFailureCallback
+import com.countrydelight.cdlogger.base.utils.SharedPreferenceHelper
 import com.countrydelight.cdlogger.data.local.event.EventEntity
 import com.countrydelight.cdlogger.domain.models.DeviceDetails
 import com.countrydelight.cdlogger.domain.models.SpaceDetails
 import com.countrydelight.cdlogger.domain.usecases.AddEventToLocalUseCase
 import com.countrydelight.cdlogger.domain.usecases.StartLogEventWorkerUseCase
-import com.countrydelight.cdlogger.domain.utils.SharedPreferenceHelper
 import com.countrydelight.cdlogger.main.detectors.exception.UncaughtExceptionDetector
 import com.countrydelight.cdlogger.main.detectors.screen.ActivityLifecycleDetector
 import com.countrydelight.cdlogger.main.utils.ConstantHelper.MESSAGE
@@ -34,13 +35,15 @@ internal class InternalLogger(
     private val spaceDetails: SpaceDetails,
     private val logActivityOpeningEvent: Boolean,
     private val logFragmentOpeningEvent: Boolean,
-    private val logCrashData: Boolean
+    private val logCrashData: Boolean,
+    private val loggerFailureCallback: ILoggerFailureCallback?
 ) {
     private val preferences = SharedPreferenceHelper.get(application)
     private val addEventToLocalUseCase = AddEventToLocalUseCase(application)
 
     companion object {
         internal var instance: InternalLogger? = null
+        internal var loggerFailureCallback: ILoggerFailureCallback? = null
     }
 
     init {
@@ -52,6 +55,7 @@ internal class InternalLogger(
      * Initializes the logger.
      */
     private fun initLogger() {
+        InternalLogger.loggerFailureCallback = loggerFailureCallback
         getAppName()
         generateUUID()
         getDeviceDetails()
@@ -107,8 +111,8 @@ internal class InternalLogger(
         val appLabel = try {
             val appInfo = application.packageManager.getApplicationInfo(application.packageName, 0)
             application.packageManager.getApplicationLabel(appInfo).toString()
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
+        } catch (exception: PackageManager.NameNotFoundException) {
+            loggerFailureCallback?.onLoggerFailure("App Name", exception)
             ""
         }
         preferences.appName = appLabel
@@ -122,7 +126,7 @@ internal class InternalLogger(
             val contentResolver = application.contentResolver
             val advertisingId = Settings.Secure.getString(contentResolver, "advertising_id")
             preferences.advertisingId = advertisingId
-        })
+        }, logMessageTag = "Advertising Id")
     }
 
 

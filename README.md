@@ -105,13 +105,30 @@ class MyApplication : Application() {
         spaceToken = "space_token"
       )
     )
-      .logActivityOpeningEvent(true) // Optional: Enable logging of activity opening events
-      .logFragmentOpeningEvent(true) // Optional: Enable logging of fragment opening events
-      .logCrashEvent(true) // Optional: Enable logging of crash events
+      .logActivityOpeningEvent(true)
+      .logFragmentOpeningEvent(true)
+      .logCrashEvent(true)
+      .registerLoggerFailureCallbacks(object : ILoggerFailureCallback {
+        override fun onLoggerFailure(failureTag: String, exception: Exception) {
+          Log.e("Logger Exception", "$failureTag , $exception")
+        }
+      })
       .build()
   }
 }
 ```
+
+1. `logActivityOpeningEvent(logActivityOpeningEvent: Boolean):` Sets whether to automatically log
+   activity opening events.By default, activity opening events are not logged.
+
+2. `logFragmentOpeningEvent(logFragmentOpeningEvent: Boolean):` Sets whether to automatically log
+   fragment opening events.By default, fragment opening events are not logged.
+
+3. `logCrashEvent(logCrashEvent: Boolean):` Sets whether to automatically log crash events.By
+   default, crash events are automatically logged.
+
+4. `registerLoggerFailureCallbacks(callback: ILoggerFailureCallback):` Registers a callback to
+   handle logger failure events.
 
 ### Step 3: Log Events
 
