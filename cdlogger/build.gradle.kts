@@ -39,12 +39,10 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("com.google.android.material:material:1.12.0")
+    // advertising id
+    implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
     //gson
     implementation("com.google.code.gson:gson:2.10.1")
     //room
@@ -63,6 +61,12 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-client-logging:$ktorVersion")
 
+    //test
+    testImplementation("junit:junit:4.13.2")
+    //android test
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
 }
 
 afterEvaluate {
@@ -71,7 +75,7 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 groupId = "com.github.cdcountrydelight"
                 artifactId = "CD-Logger"
-                version = "1.0.12"
+                version = "1.0.13"
                 from(components["release"])
             }
         }

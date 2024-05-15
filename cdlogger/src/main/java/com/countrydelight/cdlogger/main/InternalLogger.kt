@@ -3,11 +3,10 @@ package com.countrydelight.cdlogger.main
 import android.app.Application
 import android.content.pm.PackageManager
 import android.os.Build
-import android.provider.Settings
+import com.countrydelight.cdlogger.base.utils.BaseConstantHelper
 import com.countrydelight.cdlogger.base.utils.ILoggerFailureCallback
 import com.countrydelight.cdlogger.base.utils.SharedPreferenceHelper
 import com.countrydelight.cdlogger.data.local.event.EventEntity
-import com.countrydelight.cdlogger.domain.models.DeviceDetails
 import com.countrydelight.cdlogger.domain.models.SpaceDetails
 import com.countrydelight.cdlogger.domain.usecases.AddEventToLocalUseCase
 import com.countrydelight.cdlogger.domain.usecases.StartLogEventWorkerUseCase
@@ -16,6 +15,7 @@ import com.countrydelight.cdlogger.main.detectors.screen.ActivityLifecycleDetect
 import com.countrydelight.cdlogger.main.utils.ConstantHelper.MESSAGE
 import com.countrydelight.cdlogger.main.utils.FunctionHelper
 import com.countrydelight.cdlogger.main.utils.FunctionHelper.backgroundCall
+import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import java.util.UUID
 import kotlin.system.exitProcess
 
@@ -122,11 +122,12 @@ internal class InternalLogger(
      * Gets the advertising ID from the device.
      */
     private fun getAdvertisingId() {
-        backgroundCall(call = {
-            val contentResolver = application.contentResolver
-            val advertisingId = Settings.Secure.getString(contentResolver, "advertising_id")
-            preferences.advertisingId = advertisingId
-        }, logMessageTag = "Advertising Id")
+        if (preferences.advertisingId.isNullOrBlank()) {
+            backgroundCall(call = {
+                preferences.advertisingId = AdvertisingIdClient.getAdvertisingIdInfo(application).id
+            }, logMessageTag = "Advertising Id")
+        }
+
     }
 
 
@@ -147,13 +148,13 @@ internal class InternalLogger(
      */
     private fun getDeviceDetails() {
         if (preferences.deviceDetails == null) {
-            preferences.deviceDetails = DeviceDetails(
-                Build.DEVICE,
-                Build.MODEL,
-                Build.BRAND,
-                Build.MANUFACTURER,
-                Build.VERSION.SDK_INT
-            )
+            val deviceDetails = mutableMapOf<String, Any>()
+            deviceDetails[BaseConstantHelper.DEVICE_NAME] = Build.DEVICE
+            deviceDetails[BaseConstantHelper.DEVICE_MODEL] = Build.MODEL
+            deviceDetails[BaseConstantHelper.DEVICE_BRAND] = Build.BRAND
+            deviceDetails[BaseConstantHelper.DEVICE_MANUFACTURER] = Build.MANUFACTURER
+            deviceDetails[BaseConstantHelper.DEVICE_SDK_INT] = Build.VERSION.SDK_INT
+            preferences.deviceDetails = deviceDetails
         }
     }
 

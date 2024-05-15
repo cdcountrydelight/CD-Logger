@@ -2,7 +2,6 @@ package com.countrydelight.cdlogger.base.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.countrydelight.cdlogger.domain.models.DeviceDetails
 import com.countrydelight.cdlogger.domain.models.SpaceDetails
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -42,11 +41,12 @@ internal class SharedPreferenceHelper private constructor(context: Context) {
             sharedPreferences.edit().putString(APP_UID, updatedAppUID).apply()
         }
 
-    var deviceDetails: DeviceDetails?
+    var deviceDetails: MutableMap<String, Any>?
         get() {
             val gson = Gson()
             val json = sharedPreferences.getString(DEVICE_DETAILS, null)
-            return gson.fromJson(json, DeviceDetails::class.java)
+            val type = object : TypeToken<MutableMap<String, String>>() {}.type
+            return gson.fromJson(json, type)
         }
         set(updatedDeviceDetails) {
             val gson = Gson()

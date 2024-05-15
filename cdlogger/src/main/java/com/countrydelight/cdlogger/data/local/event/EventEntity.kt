@@ -2,7 +2,10 @@ package com.countrydelight.cdlogger.data.local.event
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.countrydelight.cdlogger.data.remote.event.EventRemoteEntity
+import com.countrydelight.cdlogger.base.utils.BaseConstantHelper.CREATED_AT
+import com.countrydelight.cdlogger.base.utils.BaseConstantHelper.DETAILS
+import com.countrydelight.cdlogger.base.utils.BaseConstantHelper.NAME
+import com.countrydelight.cdlogger.base.utils.BaseFunctionHelper.appendMap
 import com.countrydelight.cdlogger.data.utils.DataFunctionHelper
 
 
@@ -40,11 +43,14 @@ internal data class EventEntity(
      *
      * @return The EventRemoteEntity object.
      */
-    fun toEventRemoteEntity(): EventRemoteEntity {
-        return EventRemoteEntity(
-            eventName = eventName,
-            eventData = eventData,
-            createdAt = DataFunctionHelper.formatTimeInMillis(createdAt)
-        )
+
+    fun toEventMap(): MutableMap<String, Any> {
+        val eventMap = mutableMapOf<String, Any>()
+        eventMap[NAME] = eventName
+        val eventDataWithCreatedAt = mutableMapOf<String, Any>()
+        eventDataWithCreatedAt.appendMap(eventData)
+        eventDataWithCreatedAt[CREATED_AT] = DataFunctionHelper.formatTimeInMillis(createdAt)
+        eventMap[DETAILS] = eventDataWithCreatedAt
+        return eventMap
     }
 }
