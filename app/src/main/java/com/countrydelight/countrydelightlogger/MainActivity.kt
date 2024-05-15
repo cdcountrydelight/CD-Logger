@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
             sendHashMapDataToServerBtn.setOnClickListener {
                 CDLogger.logEvent(
                     "View Click",
-                    mutableMapOf(Pair("view_name", (it as Button).text))
+                    mutableMapOf(Pair("view_name", (it as Button).text), "view_type" to "Button")
                 )
             }
             sendStringDataToServer.setOnClickListener {
