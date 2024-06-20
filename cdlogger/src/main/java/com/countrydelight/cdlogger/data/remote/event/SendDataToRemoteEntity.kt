@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName
  * Represents data to be sent to a remote entity.
  *
  * @property appName The name of the app.
+ * @property appVersionName The version name of app.
+ * @property appVersionCode The version code of app.
  * @property userDetails A map of user details.
  * @property eventDetails The event to be sent.
  */
