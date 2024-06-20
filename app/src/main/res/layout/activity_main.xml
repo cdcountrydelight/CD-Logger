@@ -40,6 +40,15 @@
             android:textSize="16sp" />
 
         <Button
+            android:id="@+id/send_string_data_without_tag_name_to_server"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:padding="12dp"
+            android:text="@string/send_string_data_without_event_name"
+            android:textSize="16sp" />
+
+        <Button
             android:id="@+id/create_exception_on_main_thread_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

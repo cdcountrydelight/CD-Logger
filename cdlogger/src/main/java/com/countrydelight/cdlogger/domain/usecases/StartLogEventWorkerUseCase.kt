@@ -1,6 +1,7 @@
 package com.countrydelight.cdlogger.domain.usecases
 
 import android.content.Context
+import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
@@ -8,6 +9,8 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.countrydelight.cdlogger.base.utils.BaseConstantHelper
 import com.countrydelight.cdlogger.data.remote.event.SendEventWorker
+import com.countrydelight.cdlogger.main.utils.ConstantHelper
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -31,6 +34,12 @@ internal object StartLogEventWorkerUseCase {
                         // Require the device to be connected to a network.
                         .setRequiredNetworkType(NetworkType.CONNECTED)
                         .build()
+                )
+                // sets the backoff criteria for the worker
+                .setBackoffCriteria(
+                    BackoffPolicy.LINEAR,
+                    ConstantHelper.MIN_RETRY_INTERVAL,
+                    TimeUnit.MINUTES
                 )
                 // Add a tag to the work request.
                 .addTag(BaseConstantHelper.WORKER_TAG)

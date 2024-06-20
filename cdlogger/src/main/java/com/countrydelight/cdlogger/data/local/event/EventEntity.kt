@@ -21,9 +21,11 @@ import com.countrydelight.cdlogger.data.utils.DataFunctionHelper
 internal data class EventEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val eventName: String,
+    val eventName: String?,
     val eventData: MutableMap<String, Any>,
-    val createdAt: Long
+    val createdAt: Long,
+    val appVersionName: String?,
+    val appVersionCode: Long?
 ) {
 
 
@@ -46,7 +48,9 @@ internal data class EventEntity(
 
     fun toEventMap(): MutableMap<String, Any> {
         val eventMap = mutableMapOf<String, Any>()
-        eventMap[NAME] = eventName
+        if (eventName != null) {
+            eventMap[NAME] = eventName
+        }
         val eventDataWithCreatedAt = mutableMapOf<String, Any>()
         eventDataWithCreatedAt.appendMap(eventData)
         eventDataWithCreatedAt[CREATED_AT] = DataFunctionHelper.formatTimeInMillis(createdAt)

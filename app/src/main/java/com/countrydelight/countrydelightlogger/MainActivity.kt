@@ -29,6 +29,10 @@ class MainActivity : AppCompatActivity() {
             sendStringDataToServer.setOnClickListener {
                 CDLogger.logEvent("View Click", (it as Button).text.toString())
             }
+
+            sendStringDataWithoutTagNameToServer.setOnClickListener {
+                CDLogger.logEvent("Testing String Message Button Clicked")
+            }
             createExceptionOnMainThreadBtn.setOnClickListener {
                 throw RuntimeException("Testing Exception On Main Thread")
             }

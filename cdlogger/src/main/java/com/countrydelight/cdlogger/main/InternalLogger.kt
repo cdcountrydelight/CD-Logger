@@ -1,8 +1,11 @@
 package com.countrydelight.cdlogger.main
 
 import android.app.Application
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
+import androidx.core.content.pm.PackageInfoCompat
 import com.countrydelight.cdlogger.base.utils.BaseConstantHelper
 import com.countrydelight.cdlogger.base.utils.ILoggerFailureCallback
 import com.countrydelight.cdlogger.base.utils.SharedPreferenceHelper
@@ -10,6 +13,7 @@ import com.countrydelight.cdlogger.data.local.event.EventEntity
 import com.countrydelight.cdlogger.domain.models.SpaceDetails
 import com.countrydelight.cdlogger.domain.usecases.AddEventToLocalUseCase
 import com.countrydelight.cdlogger.domain.usecases.StartLogEventWorkerUseCase
+import com.countrydelight.cdlogger.main.beans.AppMetaDataBean
 import com.countrydelight.cdlogger.main.detectors.exception.UncaughtExceptionDetector
 import com.countrydelight.cdlogger.main.detectors.screen.ActivityLifecycleDetector
 import com.countrydelight.cdlogger.main.utils.ConstantHelper.MESSAGE
@@ -65,6 +69,7 @@ internal class InternalLogger(
         initExceptionHandler()
         instance = this
         StartLogEventWorkerUseCase.invoke(application)
+        Log.i(BaseConstantHelper.LOG_TAG, "CDLogger Started...")
     }
 
 
@@ -108,14 +113,17 @@ internal class InternalLogger(
      * Gets the application name from the given application object.
      */
     private fun getAppName() {
-        val appLabel = try {
-            val appInfo = application.packageManager.getApplicationInfo(application.packageName, 0)
-            application.packageManager.getApplicationLabel(appInfo).toString()
-        } catch (exception: PackageManager.NameNotFoundException) {
-            loggerFailureCallback?.onLoggerFailure("App Name", exception)
-            ""
+        if (preferences.appName.isBlank()) {
+            val appName = try {
+                val appInfo =
+                    application.packageManager.getApplicationInfo(application.packageName, 0)
+                application.packageManager.getApplicationLabel(appInfo).toString()
+            } catch (exception: PackageManager.NameNotFoundException) {
+                loggerFailureCallback?.onLoggerFailure("App Name", exception)
+                ""
+            }
+            preferences.appName = appName
         }
-        preferences.appName = appLabel
     }
 
     /**
@@ -165,14 +173,36 @@ internal class InternalLogger(
      * @param eventName The name of the event to log.
      * @param eventData Additional data associated with the event.
      */
-    private suspend fun logEventInternally(eventName: String, eventData: MutableMap<String, Any>) {
+    private suspend fun logEventInternally(eventName: String?, eventData: MutableMap<String, Any>) {
+        val appMetaData = getAppMetaData()
         val eventEntity = EventEntity(
             eventName = eventName,
             eventData = eventData,
-            createdAt = FunctionHelper.getCurrentTimeInMillis()
+            createdAt = FunctionHelper.getCurrentTimeInMillis(),
+            appVersionName = appMetaData?.versionName,
+            appVersionCode = appMetaData?.versionCode
         )
         addEventToLocalUseCase(eventEntity)
         StartLogEventWorkerUseCase.invoke(application)
+    }
+
+
+    /**
+     * Retrieves the application metadata including version name and version code.
+     *
+     * @return AppMetaDataBean containing the app version name and version code, or null if an exception occurs.
+     */
+    private fun getAppMetaData(): AppMetaDataBean? {
+        return try {
+            val packageInfo: PackageInfo =
+                application.packageManager.getPackageInfo(application.packageName, 0)
+            val appVersionName = packageInfo.versionName
+            val appVersionCode = PackageInfoCompat.getLongVersionCode(packageInfo)
+            AppMetaDataBean(appVersionName, appVersionCode)
+        } catch (exception: Exception) {
+            loggerFailureCallback?.onLoggerFailure("App Meta Data", exception)
+            null
+        }
     }
 
     /**
@@ -184,7 +214,7 @@ internal class InternalLogger(
      * @param eventName The name of the event to log.
      * @param eventMessage The message associated with the event.
      */
-    internal fun logEvent(eventName: String, eventMessage: String) {
+    internal fun logEvent(eventName: String?, eventMessage: String) {
         backgroundCall(call = {
             logEventInternally(eventName, mutableMapOf(MESSAGE to eventMessage))
         })
@@ -199,7 +229,7 @@ internal class InternalLogger(
      * @param eventName The name of the event to log.
      * @param eventData A mutable map containing additional data associated with the event.
      */
-    internal fun logEvent(eventName: String, eventData: MutableMap<String, Any>) {
+    internal fun logEvent(eventName: String?, eventData: MutableMap<String, Any>) {
         backgroundCall(call = {
             logEventInternally(eventName, eventData)
         })
