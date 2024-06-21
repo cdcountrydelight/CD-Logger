@@ -32,6 +32,16 @@ class CDLogger {
 
 
         /**
+         * Logs an event with the provided event message.
+         *
+         * @param eventMessage The message to be logged.
+         */
+        fun logEvent(eventMessage: String) {
+            InternalLogger.instance?.logEvent(null, eventMessage)
+        }
+
+
+        /**
          * Logs an event with the provided event name and event data.
          *
          * @param eventName The name of the event to log.

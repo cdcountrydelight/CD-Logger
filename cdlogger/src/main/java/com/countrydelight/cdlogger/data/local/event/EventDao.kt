@@ -17,6 +17,6 @@ internal interface EventDao {
     fun deleteEvent(event: EventEntity): Int
 
 
-    @Query("SELECT * FROM EventEntity")
+    @Query("SELECT * FROM EventEntity ORDER BY createdAt")
     fun getAllEvents(): List<EventEntity>
 }

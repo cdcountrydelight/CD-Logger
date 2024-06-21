@@ -12,7 +12,7 @@ import com.countrydelight.cdlogger.data.local.event.EventEntity
 /**
  * The Room database for the CDLogger app.
  */
-@Database(entities = [EventEntity::class], version = 1)
+@Database(entities = [EventEntity::class], version = 2)
 @TypeConverters(CDLoggerTypeConverters::class)
 internal abstract class CDLoggerDatabase : RoomDatabase() {
 
@@ -33,7 +33,9 @@ internal abstract class CDLoggerDatabase : RoomDatabase() {
                     context.applicationContext,
                     CDLoggerDatabase::class.java,
                     "com.countrydelight.cdlogger.database"
-                ).build()
+                )
+                    .addMigrations(MIGRATION_1_2)
+                    .build()
                 INSTANCE = instance
                 instance
             }

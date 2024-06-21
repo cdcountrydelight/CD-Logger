@@ -16,7 +16,7 @@ internal class FragmentLifecycleDetector : FragmentManager.FragmentLifecycleCall
         val fragmentName = fragment::class.simpleName
         if (fragmentName != "NavHostFragment") {
             CDLogger.logEvent(
-                eventName = ConstantHelper.SCREEN_OPENED,
+                eventName = ConstantHelper.FRAGMENT_OPENED,
                 eventData = mutableMapOf(ConstantHelper.SCREEN_NAME to (fragmentName ?: ""))
             )
         }

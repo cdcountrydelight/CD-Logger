@@ -8,4 +8,5 @@
     <string name="navigate_to_second_fragment">Navigate To Second Fragment</string>
     <string name="navigate_to_previous_activity">Navigate To Previous Activity</string>
     <string name="navigate_to_previous_fragment">Navigate To Previous Fragment</string>
+    <string name="send_string_data_without_event_name">Send String Data Without Event Name</string>
 </resources>

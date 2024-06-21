@@ -13,7 +13,7 @@ android {
         buildConfig = true
     }
     defaultConfig {
-        minSdk = 21
+        minSdk = 23
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -75,7 +75,7 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 groupId = "com.github.cdcountrydelight"
                 artifactId = "CD-Logger"
-                version = "1.0.14"
+                version = "1.0.15"
                 from(components["release"])
             }
         }

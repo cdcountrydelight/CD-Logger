@@ -41,7 +41,7 @@ internal class ActivityLifecycleDetector(
     override fun onActivityResumed(activity: Activity) {
         if (logActivityOpeningEvent) {
             CDLogger.logEvent(
-                eventName = ConstantHelper.SCREEN_OPENED,
+                eventName = ConstantHelper.ACTIVITY_OPENED,
                 eventData = mutableMapOf(
                     ConstantHelper.SCREEN_NAME to (activity::class.simpleName ?: "")
                 )
