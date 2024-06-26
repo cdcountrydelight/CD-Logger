@@ -4,14 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.countrydelight.cdlogger.main.CDLogger
 import com.countrydelight.countrydelightlogger.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private var messageStreamJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +39,18 @@ class MainActivity : AppCompatActivity() {
             }
             createExceptionOnMainThreadBtn.setOnClickListener {
                 throw RuntimeException("Testing Exception On Main Thread")
+            }
+            triggerMessageStream.setOnClickListener {
+                messageStreamJob?.cancel()
+                messageStreamJob = lifecycleScope.launch {
+                    repeat(5) {
+                        CDLogger.logEvent("Triggering First Message Stream with index $it")
+                    }
+                    delay(1000)
+                    repeat(5) {
+                        CDLogger.logEvent("Triggering Second Message Stream with index $it")
+                    }
+                }
             }
 
             createExceptionOnBackgroundThreadBtn.setOnClickListener {
