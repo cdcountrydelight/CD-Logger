@@ -49,7 +49,7 @@ internal object StartLogEventWorkerUseCase {
             // Enqueue the work request with a unique tag.
             BaseConstantHelper.WORKER_TAG,
             // Keep the existing work if there is a conflict.
-            ExistingWorkPolicy.KEEP,
+            ExistingWorkPolicy.APPEND,
             uploadWorkRequest
         )
     }
