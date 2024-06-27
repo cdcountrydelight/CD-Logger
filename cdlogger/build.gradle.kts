@@ -1,8 +1,8 @@
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.android")
-    id("maven-publish")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("kapt")
+    id("maven-publish")
 }
 
 android {
@@ -39,33 +39,34 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("com.google.android.material:material:1.12.0")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.material)
     // advertising id
-    implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
+    implementation(libs.play.services.ads.identifier)
     //gson
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation(libs.gson)
     //room
-    val roomVersion = "2.6.1"
-    implementation("androidx.room:room-runtime:$roomVersion")
-    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
     //noinspection KaptUsageInsteadOfKsp
-    kapt("androidx.room:room-compiler:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
     //work manager
-    implementation("androidx.work:work-runtime-ktx:2.9.0")
+    implementation(libs.androidx.work.runtime.ktx)
     //ktor
-    val ktorVersion = "2.3.7"
-    implementation("io.ktor:ktor-client-android:$ktorVersion")
-    implementation("io.ktor:ktor-serialization-gson:$ktorVersion")
-    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-client-logging:$ktorVersion")
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.serialization.gson)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.logging)
 
+    
     //test
-    testImplementation("junit:junit:4.13.2")
+    testImplementation(libs.junit)
+
+
     //android test
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation(libs.androidx.junit.v120)
+    androidTestImplementation(libs.androidx.espresso.core.v360)
 
 }
 

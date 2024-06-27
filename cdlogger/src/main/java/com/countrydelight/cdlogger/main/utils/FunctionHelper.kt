@@ -2,7 +2,6 @@ package com.countrydelight.cdlogger.main.utils
 
 import com.countrydelight.cdlogger.main.InternalLogger
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
@@ -34,7 +33,7 @@ internal object FunctionHelper {
         onCompletion: () -> Unit = {},
         logMessageTag: String = "Background Call"
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(InternalLogger.backgroundThread).launch {
             try {
                 call()
             } catch (exception: Exception) {
@@ -44,6 +43,7 @@ internal object FunctionHelper {
             onCompletion()
         }
     }
+
 
 }
 
