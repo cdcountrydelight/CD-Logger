@@ -20,7 +20,11 @@ import com.countrydelight.cdlogger.main.utils.ConstantHelper.MESSAGE
 import com.countrydelight.cdlogger.main.utils.FunctionHelper
 import com.countrydelight.cdlogger.main.utils.FunctionHelper.backgroundCall
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
+import kotlinx.coroutines.withContext
 import java.util.UUID
+import java.util.concurrent.Executors
 import kotlin.system.exitProcess
 
 
@@ -48,7 +52,9 @@ internal class InternalLogger(
     companion object {
         internal var instance: InternalLogger? = null
         internal var loggerFailureCallback: ILoggerFailureCallback? = null
+        internal val backgroundThread = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     }
+
 
     init {
         initLogger()
@@ -182,8 +188,10 @@ internal class InternalLogger(
             appVersionName = appMetaData?.versionName,
             appVersionCode = appMetaData?.versionCode
         )
-        addEventToLocalUseCase(eventEntity)
-        StartLogEventWorkerUseCase.invoke(application)
+        withContext(Dispatchers.IO) {
+            addEventToLocalUseCase(eventEntity)
+            StartLogEventWorkerUseCase.invoke(application)
+        }
     }
 
 

@@ -4,16 +4,21 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import com.countrydelight.cdlogger.main.CDLogger
 import com.countrydelight.countrydelightlogger.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private var messageStreamJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -35,6 +40,14 @@ class MainActivity : AppCompatActivity() {
             }
             createExceptionOnMainThreadBtn.setOnClickListener {
                 throw RuntimeException("Testing Exception On Main Thread")
+            }
+            triggerMessageStream.setOnClickListener {
+                messageStreamJob?.cancel()
+                messageStreamJob = lifecycleScope.launch {
+                    repeat(300) {
+                        CDLogger.logEvent("Triggering Message Stream with index $it")
+                    }
+                }
             }
 
             createExceptionOnBackgroundThreadBtn.setOnClickListener {
