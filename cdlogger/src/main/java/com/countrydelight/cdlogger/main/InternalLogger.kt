@@ -7,6 +7,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.content.pm.PackageInfoCompat
 import com.countrydelight.cdlogger.base.utils.BaseConstantHelper
+import com.countrydelight.cdlogger.base.utils.BaseFunctionHelper.isNetworkAvailable
 import com.countrydelight.cdlogger.base.utils.ILoggerFailureCallback
 import com.countrydelight.cdlogger.base.utils.SharedPreferenceHelper
 import com.countrydelight.cdlogger.data.local.event.EventEntity
@@ -141,7 +142,11 @@ internal class InternalLogger(
         if (preferences.advertisingId.isNullOrBlank() || preferences.advertisingId == PLAY_SERVICE_NOT_AVAILABLE) {
             backgroundCall(call = {
                 preferences.advertisingId = if (application.isGooglePLayServiceAvailable()) {
-                    AdvertisingIdClient.getAdvertisingIdInfo(application).id
+                    if (application.isNetworkAvailable()) {
+                        AdvertisingIdClient.getAdvertisingIdInfo(application).id
+                    } else {
+                        ""
+                    }
                 } else {
                     PLAY_SERVICE_NOT_AVAILABLE
                 }

@@ -7,9 +7,9 @@ import androidx.work.WorkerParameters
 import com.countrydelight.cdlogger.base.utils.BaseConstantHelper
 import com.countrydelight.cdlogger.base.utils.BaseConstantHelper.LOG_TAG
 import com.countrydelight.cdlogger.base.utils.BaseFunctionHelper.appendMap
+import com.countrydelight.cdlogger.base.utils.BaseFunctionHelper.isNetworkAvailable
 import com.countrydelight.cdlogger.base.utils.SharedPreferenceHelper
 import com.countrydelight.cdlogger.data.remote.response.ResponseStatusEnum
-import com.countrydelight.cdlogger.data.utils.DataFunctionHelper
 import com.countrydelight.cdlogger.domain.usecases.DeleteEventFromLocalUseCase
 import com.countrydelight.cdlogger.domain.usecases.GetAllEventsFromLocalUseCase
 import com.countrydelight.cdlogger.domain.usecases.SendEventDataToRemoteUseCase
@@ -45,7 +45,7 @@ internal class SendEventWorker(private val context: Context, workerParameters: W
         var workerResult: Result
         runBlocking {
             try {
-                if (DataFunctionHelper.isNetworkAvailable(context)) {
+                if (context.isNetworkAvailable()) {
                     val eventList = getAllEventsFromLocalUseCase()
                     eventList.forEach { event ->
                         val userDetails = mutableMapOf<String, Any>()
