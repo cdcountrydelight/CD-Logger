@@ -1,6 +1,9 @@
 package com.countrydelight.cdlogger.main.utils
 
+import android.content.Context
 import com.countrydelight.cdlogger.main.InternalLogger
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -42,6 +45,16 @@ internal object FunctionHelper {
         }.invokeOnCompletion {
             onCompletion()
         }
+    }
+
+
+    /**
+     * Extension function to check if Google Play Services are available on the device.
+     *
+     */
+    fun Context.isGooglePLayServiceAvailable(): Boolean {
+        return GoogleApiAvailability.getInstance()
+            .isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
     }
 
 

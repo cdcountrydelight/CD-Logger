@@ -13,4 +13,5 @@ internal object ConstantHelper {
     const val EXCEPTION_STACK_TRACE = "stack_trace"
     const val MESSAGE = "message"
     const val MIN_RETRY_INTERVAL: Long = 1
+    const val PLAY_SERVICE_NOT_AVAILABLE = "Play Service Not Available"
 }

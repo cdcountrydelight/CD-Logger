@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.gson)
     //room
     implementation(libs.androidx.room.runtime)
+    implementation(libs.play.services.base)
     annotationProcessor(libs.androidx.room.compiler)
     //noinspection KaptUsageInsteadOfKsp
     kapt(libs.androidx.room.compiler)
@@ -76,7 +77,7 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 groupId = "com.github.cdcountrydelight"
                 artifactId = "CD-Logger"
-                version = "1.0.16"
+                version = "1.0.17"
                 from(components["release"])
             }
         }

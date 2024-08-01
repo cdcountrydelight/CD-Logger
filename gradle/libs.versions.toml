@@ -1,11 +1,11 @@
 [versions]
 agp = "8.4.2"
-androidxJunit = "1.2.0"
+androidxJunit = "1.2.1"
 appcompat = "1.7.0"
 constraintlayout = "2.1.4"
 coreKtx = "1.13.1"
 coreSplashscreen = "1.0.1"
-espressoCoreVersion = "3.6.0"
+espressoCoreVersion = "3.6.1"
 gson = "2.10.1"
 kotlin = "1.9.0"
 junit = "4.13.2"
@@ -19,6 +19,7 @@ navigationFragmentKtx = "2.7.7"
 playServicesAdsIdentifier = "18.1.0"
 roomRuntime = "2.6.1"
 workRuntimeKtx = "2.9.0"
+playServicesBase = "18.5.0"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -43,6 +44,7 @@ ktor-serialization-gson = { module = "io.ktor:ktor-serialization-gson", version.
 leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanaryAndroid" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 play-services-ads-identifier = { module = "com.google.android.gms:play-services-ads-identifier", version.ref = "playServicesAdsIdentifier" }
+play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "playServicesBase" }
 
 
 [plugins]

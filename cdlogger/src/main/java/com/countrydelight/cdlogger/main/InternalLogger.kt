@@ -17,8 +17,10 @@ import com.countrydelight.cdlogger.main.beans.AppMetaDataBean
 import com.countrydelight.cdlogger.main.detectors.exception.UncaughtExceptionDetector
 import com.countrydelight.cdlogger.main.detectors.screen.ActivityLifecycleDetector
 import com.countrydelight.cdlogger.main.utils.ConstantHelper.MESSAGE
+import com.countrydelight.cdlogger.main.utils.ConstantHelper.PLAY_SERVICE_NOT_AVAILABLE
 import com.countrydelight.cdlogger.main.utils.FunctionHelper
 import com.countrydelight.cdlogger.main.utils.FunctionHelper.backgroundCall
+import com.countrydelight.cdlogger.main.utils.FunctionHelper.isGooglePLayServiceAvailable
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -136,9 +138,13 @@ internal class InternalLogger(
      * Gets the advertising ID from the device.
      */
     private fun getAdvertisingId() {
-        if (preferences.advertisingId.isNullOrBlank()) {
+        if (preferences.advertisingId.isNullOrBlank() || preferences.advertisingId == PLAY_SERVICE_NOT_AVAILABLE) {
             backgroundCall(call = {
-                preferences.advertisingId = AdvertisingIdClient.getAdvertisingIdInfo(application).id
+                preferences.advertisingId = if (application.isGooglePLayServiceAvailable()) {
+                    AdvertisingIdClient.getAdvertisingIdInfo(application).id
+                } else {
+                    PLAY_SERVICE_NOT_AVAILABLE
+                }
             }, logMessageTag = "Advertising Id")
         }
 
