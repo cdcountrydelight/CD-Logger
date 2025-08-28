@@ -1,16 +1,17 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.CountryDelightLogger" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/black</item>
-        <item name="android:colorPrimary">@color/black</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
+        <item name="android:colorPrimary">@color/primary</item>
     </style>
 
     <style name="Theme.CountryDelightLogger" parent="Base.Theme.CountryDelightLogger" />
 
 
     <style name="Theme.AppSplashScreen" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/black</item>
+        <item name="windowSplashScreenBackground">@color/primary</item>
         <item name="postSplashScreenTheme">@style/Theme.CountryDelightLogger</item>
     </style>
 </resources>

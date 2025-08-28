@@ -2,6 +2,7 @@ package com.countrydelight.cdlogger.base.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.countrydelight.cdlogger.domain.models.SpaceDetails
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -38,7 +39,7 @@ internal class SharedPreferenceHelper private constructor(context: Context) {
     var appUID: String
         get() = sharedPreferences.getString(APP_UID, "") ?: ""
         set(updatedAppUID) {
-            sharedPreferences.edit().putString(APP_UID, updatedAppUID).apply()
+            sharedPreferences.edit { putString(APP_UID, updatedAppUID) }
         }
 
     var deviceDetails: MutableMap<String, Any>?
@@ -51,19 +52,19 @@ internal class SharedPreferenceHelper private constructor(context: Context) {
         set(updatedDeviceDetails) {
             val gson = Gson()
             val json = gson.toJson(updatedDeviceDetails)
-            sharedPreferences.edit().putString(DEVICE_DETAILS, json).apply()
+            sharedPreferences.edit { putString(DEVICE_DETAILS, json) }
         }
 
     var advertisingId: String?
         get() = sharedPreferences.getString(ADVERTISING_ID, "") ?: ""
         set(updatedAdvertisingId) {
-            sharedPreferences.edit().putString(ADVERTISING_ID, updatedAdvertisingId).apply()
+            sharedPreferences.edit { putString(ADVERTISING_ID, updatedAdvertisingId) }
         }
 
     var appName: String
         get() = sharedPreferences.getString(APP_NAME, "") ?: ""
         set(updatedAppName) {
-            sharedPreferences.edit().putString(APP_NAME, updatedAppName).apply()
+            sharedPreferences.edit { putString(APP_NAME, updatedAppName) }
         }
 
     var userDetails: MutableMap<String, Any>
@@ -76,7 +77,7 @@ internal class SharedPreferenceHelper private constructor(context: Context) {
         set(updatedUserDetails) {
             val gson = Gson()
             val json = gson.toJson(updatedUserDetails)
-            sharedPreferences.edit().putString(USER_DETAILS, json).apply()
+            sharedPreferences.edit { putString(USER_DETAILS, json) }
         }
 
     var spaceDetails: SpaceDetails
@@ -88,6 +89,6 @@ internal class SharedPreferenceHelper private constructor(context: Context) {
         set(updatedSpaceData) {
             val gson = Gson()
             val json = gson.toJson(updatedSpaceData)
-            sharedPreferences.edit().putString(SPACE_DATA, json).apply()
+            sharedPreferences.edit { putString(SPACE_DATA, json) }
         }
 }

@@ -215,7 +215,7 @@ internal class InternalLogger(
         return try {
             val packageInfo: PackageInfo =
                 application.packageManager.getPackageInfo(application.packageName, 0)
-            val appVersionName = packageInfo.versionName
+            val appVersionName = packageInfo.versionName ?: "N/A"
             val appVersionCode = PackageInfoCompat.getLongVersionCode(packageInfo)
             AppMetaDataBean(appVersionName, appVersionCode)
         } catch (exception: Exception) {

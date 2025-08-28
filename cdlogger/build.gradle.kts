@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.countrydelight.cdlogger"
-    compileSdk = 34
+    compileSdk = 36
 
     buildFeatures {
         buildConfig = true
@@ -77,7 +77,7 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 groupId = "com.github.cdcountrydelight"
                 artifactId = "CD-Logger"
-                version = "1.0.17"
+                version = "1.0.2"
                 from(components["release"])
             }
         }
